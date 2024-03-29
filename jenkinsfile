@@ -2,14 +2,16 @@ pipeline {
     agent any
     
     stages {
-        stage('Checkout') {
-            steps {
-                // Checkout the code from GitHub repository
-                git 'https://github.com/SenthilNayakinellaiappan/maven_sample.git'
-            }
-        }
         stage('Build') {
             steps {
+                // Checkout the code from GitHub repository
+                checkout([$class: 'GitSCM',
+                          branches: [[name: '*/master']],
+                          doGenerateSubmoduleConfigurations: false,
+                          extensions: [],
+                          submoduleCfg: [],
+                          userRemoteConfigs: [[url: 'https://github.com/SenthilNayakinellaiappan/maven_sample.git']]])
+                
                 // Build the Maven project
                 sh 'mvn clean install'
             }
@@ -29,3 +31,4 @@ pipeline {
         }
     }
 }
+
